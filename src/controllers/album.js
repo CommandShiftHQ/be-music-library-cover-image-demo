@@ -1,8 +1,7 @@
 const db = require('../db')
 const { foreignKeyViolation } = require('../utils/postgres-errors')
 // STEP 5
-// STEP 5a - Require upload-file js created at STEP 4
-// const uploadFile = ...
+const uploadFile = require('../utils/upload-file')
 
 const createAlbum = async (req, res) => {
   const { file } = req
@@ -10,10 +9,7 @@ const createAlbum = async (req, res) => {
   const { name, year } = req.body
 
   try {
-    
-    // STEP 5b - Upload image to S3 first, to retrieve the URL to store in the DB
-    // const cover_image = ...
-
+    const cover_image = await uploadFile(file)
     const { rows: [ album ] } = await db.query('INSERT INTO Albums (name, year, artist_id, cover_image) VALUES ($1, $2, $3, $4) RETURNING *', [name, year, id, cover_image])
     res.status(201).json(album)
   } catch (err) {

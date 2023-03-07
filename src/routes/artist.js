@@ -14,11 +14,7 @@ const {
 } = require('../controllers/album')
 
 // STEP 3
-
-// STEP 3a
-// Import the multer middleware after setting it up in second step
-// const upload = ...
-
+const upload = require('../middleware/upload')
 
 const router = express.Router()
 
@@ -34,11 +30,9 @@ router
   .put(validateArtist, replaceArtist)
   .delete(destroyArtist)
 
-// STEP 3b 
-// Add the multer middleware to the albums create route
 router
   .route('/:id/albums')
-  .post(createAlbum) // Add it here and set the name of the file to 'cover_image'
+  .post(upload.single('cover_image'), createAlbum)
   .get(getAlbums)
 
 module.exports = router
