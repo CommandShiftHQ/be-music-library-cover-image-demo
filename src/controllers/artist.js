@@ -2,10 +2,10 @@ const db = require('../db')
 const buildUpdateStatement = require('../utils/update-statement')
 
 const createArtist = async (req, res) => {
-  const { name, genre } = req.body
+  const { name, genre, image } = req.body
 
   try {
-    const { rows: [ artist ] } = await db.query('INSERT INTO Artists (name, genre) VALUES ($1, $2) RETURNING *', [name, genre])
+    const { rows: [ artist ] } = await db.query('INSERT INTO Artists (name, genre, image) VALUES ($1, $2, $3) RETURNING *', [name, genre, image])
     res.status(201).json(artist)
   } catch (err) {
     res.status(500).json(err.message)

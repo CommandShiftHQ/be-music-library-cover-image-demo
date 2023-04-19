@@ -1,0 +1,2 @@
+ALTER TABLE Artists
+ADD COLUMN image VARCHAR(255);
