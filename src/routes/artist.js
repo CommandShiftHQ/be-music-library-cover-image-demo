@@ -15,12 +15,13 @@ const {
 
 // STEP 3
 const upload = require('../middleware/upload')
+const authorize = require('../middleware/authorize')
 
 const router = express.Router()
 
 router
   .route('/')
-  .post(validateArtist, createArtist)
+  .post(validateArtist, authorize, createArtist)
   .get(getAllArtists)
 
 router 

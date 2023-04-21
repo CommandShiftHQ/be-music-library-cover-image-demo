@@ -1,0 +1,2 @@
+ALTER TABLE Artists
+ADD COLUMN user_id VARCHAR(255);

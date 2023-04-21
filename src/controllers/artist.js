@@ -5,7 +5,7 @@ const createArtist = async (req, res) => {
   const { name, genre, image } = req.body
 
   try {
-    const { rows: [ artist ] } = await db.query('INSERT INTO Artists (name, genre, image) VALUES ($1, $2, $3) RETURNING *', [name, genre, image])
+    const { rows: [ artist ] } = await db.query('INSERT INTO Artists (name, genre, image, user_id) VALUES ($1, $2, $3, $4) RETURNING *', [name, genre, image, req.user.uid])
     res.status(201).json(artist)
   } catch (err) {
     res.status(500).json(err.message)
