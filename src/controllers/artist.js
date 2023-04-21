@@ -1,5 +1,6 @@
 const db = require('../db')
 const buildUpdateStatement = require('../utils/update-statement')
+const admin = require('firebase-admin')
 
 const createArtist = async (req, res) => {
   const { name, genre, image } = req.body
@@ -15,7 +16,15 @@ const createArtist = async (req, res) => {
 const getAllArtists = async (_, res) => {
   try {
     const { rows } = await db.query('SELECT * FROM Artists')
-    res.status(200).json(rows)
+    const userIds = rows.filter(row => !!row.user_id).map(row => ({ uid: row.user_id }))
+    const { users } = await admin.auth().getUsers(userIds)
+
+    const artistsWithUsers = rows.map(row => ({
+      ...row,
+      user: users.find(user => user.uid === row.user_id)?.email
+    }))
+
+    res.status(200).json(artistsWithUsers)
   } catch (err) {
     res.status(500).json(err.message)
   }
